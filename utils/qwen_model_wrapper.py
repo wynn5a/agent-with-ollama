@@ -8,8 +8,13 @@ compatible with smolagents' code parsing.
 """
 
 import re
+import logging
 from smolagents import LiteLLMModel
 from typing import List, Dict, Any, Optional
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class QwenModelWrapper(LiteLLMModel):
     """
@@ -17,9 +22,10 @@ class QwenModelWrapper(LiteLLMModel):
     to make responses compatible with smolagents.
     """
     
-    def __init__(self, **kwargs):
+    def __init__(self, verbose: bool = True, **kwargs):
         """Initialize the Qwen model wrapper with thinking tag filtering."""
         super().__init__(**kwargs)
+        self.verbose = verbose
     
     def _clean_thinking_tags(self, text: str) -> str:
         """
@@ -76,14 +82,51 @@ class QwenModelWrapper(LiteLLMModel):
         Returns:
             Response object with cleaned content
         """
+        if self.verbose:
+            print("\n" + "="*60)
+            print("🔍 LLM REQUEST")
+            print("="*60)
+            print(f"Model: {self.model_id}")
+            print(f"Messages count: {len(messages)}")
+            if messages:
+                last_message = messages[-1]
+                content = last_message.get('content', '')
+                if isinstance(content, list):
+                    # Handle multi-modal content
+                    text_parts = [item.get('text', '') for item in content if item.get('type') == 'text']
+                    content = ' '.join(text_parts)
+                print(f"Last message: {content[:200]}{'...' if len(content) > 200 else ''}")
+            print("="*60)
+        
         # Call the parent generate method
         response = super().generate(messages, **kwargs)
         
+        # Log raw response
+        if self.verbose and hasattr(response, 'content') and response.content:
+            print("\n" + "="*60)
+            print("🤖 RAW LLM RESPONSE")
+            print("="*60)
+            print(response.content)
+            print("="*60)
+        
         # Clean the response content if it exists
         if hasattr(response, 'content') and response.content:
+            original_content = response.content
             cleaned_content = self._clean_thinking_tags(response.content)
             cleaned_content = self._fix_code_blocks(cleaned_content)
             response.content = cleaned_content
+            
+            # Log cleaning process
+            if self.verbose:
+                if original_content != cleaned_content:
+                    print("\n" + "="*60)
+                    print("🧹 CLEANED RESPONSE")
+                    print("="*60)
+                    print("Thinking tags removed and code blocks fixed:")
+                    print(cleaned_content)
+                    print("="*60)
+                else:
+                    print("\n✅ No cleaning needed - response was already clean")
         
         return response
 
@@ -93,6 +136,7 @@ def create_qwen_model(
     api_key: str = "dummy_key",
     num_ctx: int = 8192,
     temperature: float = 0.1,
+    verbose: bool = True,
     **kwargs
 ) -> QwenModelWrapper:
     """
@@ -104,6 +148,7 @@ def create_qwen_model(
         api_key: API key (dummy for local Ollama)
         num_ctx: Context window size
         temperature: Sampling temperature
+        verbose: Enable verbose logging
         **kwargs: Additional model parameters
         
     Returns:
@@ -115,5 +160,6 @@ def create_qwen_model(
         api_key=api_key,
         num_ctx=num_ctx,
         temperature=temperature,
+        verbose=verbose,
         **kwargs
     ) 

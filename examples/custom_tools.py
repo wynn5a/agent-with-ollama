@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Custom Tools Example for Smolagents
 
@@ -7,7 +8,13 @@ This script demonstrates how to create and use custom tools with the smolagents 
 
 import requests
 import json
-from smolagents import Tool, CodeAgent, LiteLLMModel
+import sys
+import os
+from smolagents import Tool, CodeAgent
+
+# Add utils directory to path for imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'utils'))
+from qwen_model_wrapper import create_qwen_model
 
 class WeatherTool(Tool):
     """Custom tool to get weather information."""
@@ -106,13 +113,14 @@ class UrlShortenerTool(Tool):
 def create_agent_with_custom_tools():
     """Create an agent with custom tools."""
     
-    # Initialize the model
-    model = LiteLLMModel(
+    # Initialize the Qwen model wrapper
+    model = create_qwen_model(
         model_id="ollama_chat/qwen3:latest",
         api_base="http://localhost:11434",
         api_key="dummy_key",
         num_ctx=8192,
         temperature=0.1,
+        verbose=True,
     )
     
     # Create custom tool instances
