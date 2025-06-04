@@ -1,0 +1,4 @@
+smolagents[litellm]
+requests
+python-dotenv 
+duckduckgo-search
