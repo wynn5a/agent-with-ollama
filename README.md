@@ -1,254 +1,307 @@
-# Smolagents with Local Ollama Integration
+# AI Agent with Ollama
 
-A powerful AI agent framework using [smolagents](https://github.com/huggingface/smolagents) with local Ollama models. This project demonstrates how to create intelligent agents that can reason, use tools, and execute code using your local Qwen3 model.
+A powerful AI agent system powered by Qwen3 and Ollama, featuring both command-line tools and a beautiful modern web interface.
 
-## 🚀 Features
+## ✨ Features
 
-- **Local AI Model**: Uses your local Ollama `qwen3:latest` model
-- **Built-in Tools**: Calculator, Python code interpreter, and more
-- **Custom Tools**: Extensible framework for adding custom functionality
-- **Batch Processing**: Process multiple tasks efficiently
-- **Interactive Mode**: Real-time conversation with the agent
-- **Professional Code**: Clean, maintainable, and well-documented
+### 🤖 Core Agent Capabilities
+- **Local AI Processing**: Powered by Qwen3 via Ollama - no cloud dependencies
+- **Code Generation & Execution**: Write, run, and debug code in multiple languages
+- **Tool Integration**: Built-in tools for calculations, web search, and more
+- **Batch Processing**: Process multiple tasks efficiently with retry logic
+- **Thinking Tags Support**: Advanced reasoning with visible thought processes
 
-## 📋 Prerequisites
+### 🎨 Beautiful Web Interface
+- **Modern Chat UI**: Beautiful, responsive interface built with Next.js 15
+- **Real-time Communication**: Instant messaging with typing indicators
+- **Smooth Animations**: Framer Motion powered transitions and micro-interactions
+- **Dark Mode Support**: Automatic theme switching based on system preferences
+- **Performance Monitoring**: Execution time tracking and connection status
+- **Mobile Responsive**: Perfect experience across all devices
 
-### 1. Ollama Installation
+## 🚀 Quick Start
 
-First, install Ollama on your system:
+### Prerequisites
 
+1. **Ollama** - [Install Ollama](https://ollama.ai/)
+2. **Qwen3 Model** - Run `ollama pull qwen3:latest`
+3. **Python 3.8+** - [Download Python](https://python.org/)
+4. **Node.js 18+** (for web UI) - [Download Node.js](https://nodejs.org/)
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd agent-with-ollama
+   ```
+
+2. **Install Python dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Start Ollama (if not already running):**
+   ```bash
+   ollama serve
+   ```
+
+### Usage Options
+
+#### 🎨 Web Interface (Recommended)
+Launch the beautiful chat interface:
 ```bash
-# macOS
-brew install ollama
-
-# Linux
-curl -fsSL https://ollama.ai/install.sh | sh
-
-# Windows
-# Download from https://ollama.ai/download
+python start_chat_ui.py
 ```
 
-### 2. Pull the Qwen3 Model
+This will start both the Python backend (port 8000) and Next.js frontend (port 3000).
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-```bash
-ollama pull qwen3:latest
-```
-
-### 3. Start Ollama Server
-
-```bash
-ollama serve
-```
-
-Verify it's running by visiting `http://localhost:11434` in your browser.
-
-## 🛠️ Installation
-
-1. **Clone the repository**:
-```bash
-git clone <your-repo-url>
-cd agent-with-ollama
-```
-
-2. **Create a virtual environment**:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. **Install dependencies**:
-```bash
-pip install -r requirements.txt
-```
-
-4. **Configure environment** (optional):
-```bash
-cp config.env.example .env
-# Edit .env file if you need custom settings
-```
-
-## 🎯 Usage
-
-### Basic Agent
-
-Run the main agent script for interactive mode:
-
+#### 💻 Command Line Interface
+For direct command-line usage:
 ```bash
 python main.py
 ```
 
-This will start an interactive session where you can:
-- Ask mathematical questions
-- Request code generation and execution
-- Perform calculations
-- Get help with various tasks
-
-**Example interactions**:
-```
-🧑 You: Calculate the 10th Fibonacci number
-🤖 Agent: I'll calculate the 10th Fibonacci number for you...
-
-🧑 You: Write a Python function to reverse a string and test it
-🤖 Agent: I'll create a function to reverse a string and test it...
-```
-
-### Custom Tools Example
-
-Run the custom tools demo to see extended functionality:
-
-```bash
-python examples/custom_tools.py
-```
-
-This includes additional tools like:
-- **Weather Checker**: Get weather information for cities
-- **Text Analyzer**: Analyze text statistics
-- **URL Shortener**: Create shortened URLs
-
-### Batch Processing
-
-Process multiple tasks efficiently:
-
+#### 📦 Batch Processing
+Process multiple tasks from a file:
 ```bash
 python examples/batch_processing.py
 ```
 
-Features:
-- Process predefined task lists
-- Generate execution reports
-- Save results to JSON files
-- Performance metrics
+## 🏗️ Architecture
+
+### Core Components
+- **QwenModelWrapper**: Custom wrapper handling Qwen3's thinking tags
+- **CodeAgent**: Main agent with tool integration and code execution
+- **Web Server**: FastAPI backend for the chat interface
+- **Chat UI**: Modern Next.js frontend with TypeScript and Tailwind CSS
+
+### Project Structure
+```
+agent-with-ollama/
+├── agent-ui/                    # Next.js chat interface
+│   ├── src/
+│   │   ├── app/                # App router and API routes
+│   │   │   └── types/             # TypeScript definitions
+│   │   └── package.json
+│   ├── examples/
+│   │   ├── batch_processing.py    # Batch task processing
+│   │   └── tasks.txt             # Sample tasks
+│   ├── utils/
+│   │   └── qwen_model_wrapper.py # Qwen3 integration
+│   ├── main.py                   # CLI interface
+│   ├── web_server.py            # FastAPI backend
+│   └── start_chat_ui.py         # Startup script
+└── requirements.txt
+```
+
+## 🎯 Features in Detail
+
+### Web Interface Features
+- **Real-time Chat**: Instant messaging with the AI agent
+- **Status Indicators**: Live connection and processing status
+- **Execution Metrics**: Track response times and performance
+- **Message History**: Persistent conversation history
+- **Error Handling**: Graceful error display and retry mechanisms
+- **Responsive Design**: Works on desktop, tablet, and mobile
+
+### Agent Capabilities
+- **Code Generation**: Write functions, scripts, and complete programs
+- **Mathematical Calculations**: Solve complex equations and problems
+- **Text Processing**: Analysis, summarization, and transformation
+- **Problem Solving**: Step-by-step reasoning and solution development
+- **Tool Usage**: Integrated calculator, web search, and more
+
+### Advanced Features
+- **Thinking Process Visibility**: See how the AI reasons through problems
+- **Retry Logic**: Automatic retry with exponential backoff
+- **Timeout Handling**: Configurable timeouts for long-running tasks
+- **Error Recovery**: Graceful handling of failures and edge cases
 
 ## 🔧 Configuration
 
 ### Environment Variables
-
-Create a `.env` file based on `config.env.example`:
-
+Create a `.env` file:
 ```env
 # Ollama Configuration
 OLLAMA_API_BASE=http://localhost:11434
 OLLAMA_MODEL=qwen3:latest
-OLLAMA_CONTEXT_SIZE=8192
-OLLAMA_TEMPERATURE=0.1
-MAX_ITERATIONS=10
+
+# Agent Settings
+AGENT_TEMPERATURE=0.1
+AGENT_MAX_TOKENS=8192
+AGENT_VERBOSE=false
+
+# Web UI Settings
+PYTHON_BACKEND_URL=http://localhost:8000
 ```
 
 ### Model Configuration
-
-The agent is configured with optimal settings for the Qwen3 model:
-
-- **Context Size**: 8192 tokens (important for agent reasoning)
-- **Temperature**: 0.1 (low for consistent responses)
-- **Max Iterations**: 10 (prevents infinite loops)
-
-## 🛠️ Creating Custom Tools
-
-You can extend the agent with custom tools. Here's a simple example:
-
+The agent uses Qwen3 by default, but you can configure other models:
 ```python
-from smolagents import Tool
-
-class MyCustomTool(Tool):
-    name = "my_tool"
-    description = "Description of what this tool does"
-    inputs = {
-        "input_param": {
-            "type": "string",
-            "description": "Description of the input parameter"
-        }
-    }
-    output_type = "string"
-    
-    def forward(self, input_param: str) -> str:
-        # Your tool logic here
-        return f"Processed: {input_param}"
-
-# Add to agent
-tool = MyCustomTool()
-agent = CodeAgent(tools=[tool], model=model, add_base_tools=True)
+agent_config = {
+    "model_id": "ollama_chat/qwen3:latest",
+    "api_base": "http://localhost:11434",
+    "temperature": 0.1,
+    "num_ctx": 8192,
+}
 ```
 
-## 📊 Built-in Tools
+## 📚 Examples
 
-The agent comes with several built-in tools:
+### Basic Chat
+```python
+from utils.qwen_model_wrapper import create_qwen_model
+from smolagents import CodeAgent
 
-- **Calculator**: Perform mathematical calculations
-- **Python Code Interpreter**: Execute Python code safely
-- **Web Search**: Search for information online (if configured)
-- **File Operations**: Read and write files
+model = create_qwen_model()
+agent = CodeAgent(tools=[], model=model, add_base_tools=True)
+
+response = agent.run("Calculate the factorial of 10")
+print(response)
+```
+
+### Batch Processing
+```python
+tasks = [
+    "Write a Python function to reverse a string",
+    "Calculate the area of a circle with radius 5",
+    "Explain quantum computing in simple terms"
+]
+
+# Process with the batch script
+python examples/batch_processing.py
+```
+
+### Web API Usage
+```bash
+# Start the web server
+python web_server.py
+
+# Send a chat message
+curl -X POST http://localhost:8000/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Hello, AI agent!"}'
+```
 
 ## 🔍 Troubleshooting
 
 ### Common Issues
 
-1. **"Connection refused" error**:
+1. **"Cannot connect to Ollama"**
    ```bash
-   # Make sure Ollama is running
+   # Start Ollama
    ollama serve
+   
+   # Verify it's running
+   curl http://localhost:11434/api/tags
    ```
 
-2. **Model not found**:
+2. **"Model not found"**
    ```bash
-   # Pull the model
+   # Pull the Qwen3 model
    ollama pull qwen3:latest
    
-   # Verify it's available
+   # List available models
    ollama list
    ```
 
-3. **Out of memory errors**:
-   - Reduce `OLLAMA_CONTEXT_SIZE` in your `.env` file
-   - Use a smaller model if available
+3. **"Thinking tags not handled"**
+   - Ensure you're using `QwenModelWrapper` instead of raw `LiteLLMModel`
+   - Check that the wrapper is properly configured
 
-4. **Slow responses**:
-   - Ensure you have sufficient RAM (8GB+ recommended)
-   - Close other applications to free up resources
+4. **Web UI connection issues**
+   - Verify Python backend is running on port 8000
+   - Check CORS settings in `web_server.py`
+   - Ensure Next.js is running on port 3000
 
-### Performance Tips
+### Debug Mode
+Enable verbose logging:
+```bash
+# For CLI
+python main.py --verbose
 
-- **RAM**: 8GB+ recommended for optimal performance
-- **Context Size**: Start with 4096 if 8192 is too large
-- **Temperature**: Keep low (0.1-0.3) for consistent agent behavior
-- **Iterations**: Limit to 5-10 to prevent long execution times
-
-## 🏗️ Project Structure
-
+# For web server
+AGENT_VERBOSE=true python web_server.py
 ```
-agent-with-ollama/
-├── main.py                    # Main agent script
-├── requirements.txt           # Python dependencies
-├── config.env.example        # Environment configuration template
-├── examples/
-│   ├── custom_tools.py       # Custom tools demonstration
-│   └── batch_processing.py   # Batch processing example
-└── README.md                 # This file
+
+## 🚀 Deployment
+
+### Development
+```bash
+# Start everything
+python start_chat_ui.py
+
+# Or start components separately
+python web_server.py  # Backend on port 8000
+cd agent-ui && npm run dev  # Frontend on port 3000
+```
+
+### Production
+```bash
+# Build the frontend
+cd agent-ui
+npm run build
+
+# Start production servers
+python web_server.py
+cd agent-ui && npm start
+```
+
+### Docker (Optional)
+```dockerfile
+# Multi-stage build for the complete stack
+FROM python:3.11-slim as backend
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+
+FROM node:18-alpine as frontend
+WORKDIR /app/agent-ui
+COPY agent-ui/package*.json ./
+RUN npm ci
+COPY agent-ui/ .
+RUN npm run build
+
+# Production image
+FROM python:3.11-slim
+WORKDIR /app
+COPY --from=backend /app .
+COPY --from=frontend /app/agent-ui/.next ./agent-ui/.next
+EXPOSE 8000 3000
+CMD ["python", "start_chat_ui.py"]
 ```
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'Add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
 
-## 📝 License
+### Development Guidelines
+- Follow PEP 8 for Python code
+- Use TypeScript for frontend development
+- Add tests for new features
+- Update documentation for changes
+
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- [Hugging Face Smolagents](https://github.com/huggingface/smolagents) - The core agent framework
-- [Ollama](https://ollama.ai/) - Local LLM serving
-- [Qwen](https://github.com/QwenLM/Qwen) - The language model
-
-## 📚 Additional Resources
-
-- [Smolagents Documentation](https://huggingface.co/docs/smolagents)
-- [Ollama Documentation](https://github.com/ollama/ollama/blob/main/README.md)
-- [Qwen Model Documentation](https://huggingface.co/Qwen)
+- **Ollama Team** - For the amazing local LLM platform
+- **Qwen Team** - For the powerful Qwen3 language model
+- **smolagents** - For the excellent agent framework
+- **Next.js Team** - For the outstanding React framework
+- **Tailwind CSS** - For the utility-first CSS framework
 
 ---
 
-**Happy coding with your local AI agent! 🤖✨**
+**Ready to chat with your AI agent? 🤖💬**
+
+Get started with: `python start_chat_ui.py`

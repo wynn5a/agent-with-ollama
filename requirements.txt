@@ -2,3 +2,5 @@ smolagents[litellm]
 requests
 python-dotenv 
 duckduckgo-search
+fastapi
+uvicorn[standard]
